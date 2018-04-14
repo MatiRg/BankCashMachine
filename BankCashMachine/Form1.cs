@@ -21,7 +21,7 @@ namespace BankCashMachine
         private void Setup()
         {
             CashMachine.StateChanged = OnStateChanged;
-            CashMachine.Get().Setup( 1234, 4500 );
+            CashMachine.Instance.Setup( 1234, 4500 );
         }
 
         private void OnStateChanged(IState s)
@@ -46,12 +46,12 @@ namespace BankCashMachine
 
         private void button4_Click(object sender, EventArgs e)
         {
-            if (!CashMachine.Get().State.OnAcceptButton())
+            if (!CashMachine.Instance.State.OnAcceptButton())
             {
-                DisplayText(CashMachine.Get().State);
+                DisplayText(CashMachine.Instance.State);
                 int i = 0;
                 string s = InputBox.Text;
-                if (int.TryParse(s, out i)) CashMachine.Get().State.Operate(i);
+                if (int.TryParse(s, out i)) CashMachine.Instance.State.Operate(i);
             }
             InputBox.Clear();
         }
@@ -72,7 +72,7 @@ namespace BankCashMachine
 
         private void button3_Click(object sender, EventArgs e)
         {
-            CashMachine.Get().State.OnCancelButton();
+            CashMachine.Instance.State.OnCancelButton();
         }
 
         private void TextBoxFocus(object sender, EventArgs e)

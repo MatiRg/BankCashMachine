@@ -8,7 +8,23 @@ namespace BankCashMachine
 {
     public sealed class CashMachine
     {
-        private static CashMachine Instance = null;
+        private static object Mutex = new object();
+        private static volatile CashMachine InstanceImpl;
+
+        public static CashMachine Instance
+        {
+            get
+            {
+                if(InstanceImpl == null) // double-check lock
+                {
+                    lock(Mutex)
+                    {
+                        if (InstanceImpl == null) InstanceImpl = new CashMachine();
+                    }
+                }
+                return InstanceImpl;
+            }
+        }
 
         public static Action<IState> StateChanged
         {
@@ -44,7 +60,7 @@ namespace BankCashMachine
             State = new NullState(this);
         }
 
-        public static CashMachine Get() => Instance ?? (Instance = new CashMachine());
+        //public static CashMachine Get() => Instance ?? (Instance = new CashMachine());
 
         public void Setup(int P, int C)
         {
